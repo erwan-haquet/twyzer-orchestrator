@@ -4,11 +4,16 @@ namespace App\Message;
 
 class Message
 {
-    private $content;
+    private $msg;
+    private $username;
+    private $displayName;
+    private $userId;
 
-    public function __construct(string $content)
+    public function __construct($msg, $username, $displayName, $userId)
     {
-        $this->content = $content;
+        $this->msg = $msg;
+        $this->username = $username;
+        $this->displayName = $displayName;
+        $this->userId = $userId;
     }
-
 }
