@@ -2,7 +2,7 @@
 
 namespace App\Message;
 
-class Message
+class PostMessage
 {
     private $msg;
     private $username;
