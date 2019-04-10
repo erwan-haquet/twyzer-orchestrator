@@ -1,8 +1,8 @@
 <?php
 
-namespace App\UI\RabbitMQ\Action;
+namespace App\Application\Command\Message;
 
-class MessagePosted
+class PostMessageCommand
 {
     private $msg;
     private $username;

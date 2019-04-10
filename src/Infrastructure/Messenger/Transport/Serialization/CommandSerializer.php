@@ -1,7 +1,8 @@
 <?php
 
-namespace App\UI\RabbitMQ\Serializer;
+namespace App\Infrastructure\Messenger\Transport\Serialization;
 
+use App\Application\Command\CommandFactory;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\InvalidArgumentException;
 use Symfony\Component\Messenger\Stamp\SerializerStamp;
@@ -12,7 +13,6 @@ use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 use Symfony\Component\Serializer\SerializerInterface as SymfonySerializerInterface;
-use App\UI\RabbitMQ\Factory\ActionFactory;
 
 /**
  * This is an override of Symfony\Component\Messenger\Transport\Serialization\Serializer
@@ -21,21 +21,21 @@ use App\UI\RabbitMQ\Factory\ActionFactory;
  * Class CustomSerializer
  * @package App\Transport\Serialization
  */
-class ActionSerializer implements SerializerInterface
+class CommandSerializer implements SerializerInterface
 {
     private const STAMP_HEADER_PREFIX = 'X-Message-Stamp-';
 
     private $serializer;
     private $format;
     private $context;
-    private $actionFactory;
+    private $commandFactory;
 
     public function __construct(SymfonySerializerInterface $serializer = null, string $format = 'json', array $context = [])
     {
         $this->serializer = $serializer ?? self::create()->serializer;
         $this->format = $format;
         $this->context = $context;
-        $this->actionFactory = new ActionFactory();
+        $this->commandFactory = new CommandFactory();
     }
 
     public static function create(): self
@@ -58,12 +58,12 @@ class ActionSerializer implements SerializerInterface
             throw new InvalidArgumentException('Encoded envelope should have at least a "body" and some "headers".');
         }
 
-        if (empty($encodedEnvelope['headers']['action'])) {
-            throw new InvalidArgumentException('Encoded envelope does not have an "action" header.');
+        if (empty($encodedEnvelope['headers']['command'])) {
+            throw new InvalidArgumentException('Encoded envelope does not have an "command" header.');
         }
 
-        if (!$action = $this->actionFactory->getAction($encodedEnvelope['headers']['action'])) {
-            throw new InvalidArgumentException(sprintf('"%s" is not a valid action.', $encodedEnvelope['headers']['action']));
+        if (!$command = $this->commandFactory->getCommand($encodedEnvelope['headers']['command'])) {
+            throw new InvalidArgumentException(sprintf('"%s" is not a valid command.', $encodedEnvelope['headers']['command']));
         }
 
         $stamps = $this->decodeStamps($encodedEnvelope);
@@ -73,7 +73,7 @@ class ActionSerializer implements SerializerInterface
             $context = end($stamps[SerializerStamp::class])->getContext() + $context;
         }
 
-        $message = $this->serializer->deserialize($encodedEnvelope['body'], $action, $this->format, $context);
+        $message = $this->serializer->deserialize($encodedEnvelope['body'], $command, $this->format, $context);
 
         return new Envelope($message, ...$stamps);
     }

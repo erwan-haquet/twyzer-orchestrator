@@ -17,8 +17,8 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Constant,Tests,Kernel.php}'
 
-    app.ui.rabbit_mq.action_serializer:
-        alias: App\UI\RabbitMQ\Serializer\ActionSerializer
+    app.messenger.transport.serialization.command_serializer:
+        alias: App\Infrastructure\Messenger\Transport\Serialization\CommandSerializer
         public: true
 
     # add more service definitions when explicit configuration is needed
