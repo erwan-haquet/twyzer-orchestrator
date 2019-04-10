@@ -1,8 +1,11 @@
 # Client accumulator [Twitch Scrutinizer]
 
 ## Project overview 
-Twitch scrutinizer is an [Erwan Haquet](https://github.com/erwan-haquet) side-project.
-The main goal is to learn a bunch of new cool tools like Symfony 4, Api plateform, RabbitMQ, ReactJS...
+Twitch scrutinizer is a [Erwan Haquet](https://github.com/erwan-haquet) side-project.
+The goals are to **learn a bunch of new cool tools** like Symfony 4, Mercure, RabbitMQ, ReactJS, ElasticSearch... **use new concepts** like CQRS / Event sourcing and **enjoy coding** :)
 
 #### Chat accumulator 
-A symfony instance, which is responsible to consume RabbitMQ messages, format & save them into database.
+A symfony service which is responsible to manage data using CQRS & Event sourcing.
+
+## Documentation
+TODO 
