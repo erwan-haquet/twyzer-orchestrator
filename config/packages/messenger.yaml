@@ -1,5 +1,5 @@
 framework:
   messenger:
-    serializer: 'app.transport.external_message_serializer'
+    serializer: 'app.ui.rabbit_mq.action_serializer'
     transports:
       amqp: '%env(MESSENGER_TRANSPORT_DSN)%'
