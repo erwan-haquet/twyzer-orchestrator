@@ -4,16 +4,40 @@ namespace App\Application\Command\Message;
 
 class PostMessageCommand
 {
-    private $msg;
-    private $username;
-    private $displayName;
-    private $userId;
+    /**
+     * Message
+     **/
+    private $messageId;
+    private $message;
+    private $emotes;
 
-    public function __construct($msg, $username, $displayName, $userId)
+    /**
+     * User
+     **/
+    private $userId;
+    private $userName;
+    private $badges;
+    private $badgeInfo;
+    private $color;
+
+    /**
+     * Channel
+     **/
+    private $channel;
+    private $roomId;
+
+
+    public function __construct($payload)
     {
-        $this->msg = $msg;
-        $this->username = $username;
-        $this->displayName = $displayName;
-        $this->userId = $userId;
+        $this->messageId = $payload['messageId'];
+        $this->message = $payload['message'];
+        $this->emotes = $payload['emotes'];
+        $this->userId = $payload['userId'];
+        $this->userName = $payload['userName'];
+        $this->badges = $payload['badges'];
+        $this->badgeInfo = $payload['badgeInfo'];
+        $this->color = $payload['color'];
+        $this->channel = $payload['channel'];
+        $this->roomId = $payload['roomId'];
     }
 }
