@@ -1,9 +1,9 @@
-# TILER Orchestrator service
+# Twyzer - Orchestrator service
 
 ## Project overview 
-TILER for Twitch scrutinizer is a [Erwan Haquet](https://github.com/erwan-haquet) side-project.   
+Twyzer for Twitch analyzer is a [Erwan Haquet](https://github.com/erwan-haquet) side-project.   
 Goals are to **learn a bunch of new cool tools** like Symfony 4, Mercure, RabbitMQ, ReactJS, ElasticSearch... **use new concepts** like CQRS / Event sourcing and **enjoy coding** :)   
-If you want to learn more, check out the [main repository](https://github.com/erwan-haquet/tiler-box).
+If you want to learn more, check out the [main repository](https://github.com/erwan-haquet/twyzer-box).
 
 ## Orchestrator service
 A symfony service which is responsible to manage data using CQRS & Event sourcing.
