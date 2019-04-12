@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Messenger\Transport\Serialization;
 
-use App\Application\Command\CommandFactory;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\InvalidArgumentException;
 use Symfony\Component\Messenger\Stamp\SerializerStamp;
@@ -28,14 +27,12 @@ class CommandSerializer implements SerializerInterface
     private $serializer;
     private $format;
     private $context;
-    private $commandFactory;
 
     public function __construct(SymfonySerializerInterface $serializer = null, string $format = 'json', array $context = [])
     {
         $this->serializer = $serializer ?? self::create()->serializer;
         $this->format = $format;
         $this->context = $context;
-        $this->commandFactory = new CommandFactory();
     }
 
     public static function create(): self
@@ -52,8 +49,6 @@ class CommandSerializer implements SerializerInterface
      */
     public function decode(array $encodedEnvelope): Envelope
     {
-        var_dump($encodedEnvelope);
-
         if (empty($encodedEnvelope['body']) || empty($encodedEnvelope['headers'])) {
             throw new InvalidArgumentException('Encoded envelope should have at least a "body" and some "headers".');
         }
@@ -62,7 +57,10 @@ class CommandSerializer implements SerializerInterface
             throw new InvalidArgumentException('Encoded envelope does not have an "command" header.');
         }
 
-        if (!$command = $this->commandFactory->getCommand($encodedEnvelope['headers']['command'])) {
+        // TODO #1 find a better way to handle className finder based on command header
+        $type = 'App\\Application\\Command\\'.ucfirst($encodedEnvelope['headers']['command']);
+
+        if (!class_exists($type)) {
             throw new InvalidArgumentException(sprintf('"%s" is not a valid command.', $encodedEnvelope['headers']['command']));
         }
 
@@ -73,7 +71,7 @@ class CommandSerializer implements SerializerInterface
             $context = end($stamps[SerializerStamp::class])->getContext() + $context;
         }
 
-        $message = $this->serializer->deserialize($encodedEnvelope['body'], $command, $this->format, $context);
+        $message = $this->serializer->deserialize($encodedEnvelope['body'], $type, $this->format, $context);
 
         return new Envelope($message, ...$stamps);
     }

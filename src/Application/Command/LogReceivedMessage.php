@@ -1,36 +1,40 @@
 <?php
 
-namespace App\Application\Command\Message;
+namespace App\Application\Command;
 
-class PostMessageCommand
+class LogReceivedMessage
 {
-    /**
-     * Message
-     **/
+    /** @var string */
     private $messageId;
+    /** @var string */
     private $message;
+    /** @var string */
+    private $messageType;
+    /** @var array */
     private $emotes;
-
-    /**
-     * User
-     **/
+    
+    /** @var string */
     private $userId;
+    /** @var string */
     private $userName;
+    /** @var array|null */
     private $badges;
+    /** @var string|null */
     private $badgeInfo;
+    /** @var string|null */
     private $color;
 
-    /**
-     * Channel
-     **/
+    /** @var string */
     private $channel;
+    /** @var string */
     private $roomId;
 
 
-    public function __construct($payload)
+    public function __construct(array $payload)
     {
         $this->messageId = $payload['messageId'];
         $this->message = $payload['message'];
+        $this->messageType = $payload['messageType'];
         $this->emotes = $payload['emotes'];
         $this->userId = $payload['userId'];
         $this->userName = $payload['userName'];
